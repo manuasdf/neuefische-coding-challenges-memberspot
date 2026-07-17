@@ -1,7 +1,7 @@
 const numberRows:number = 50;
 const numberColumns:number = 50;
-const dead:string = "·";
-const alive:string = "0";
+const dead:string = " ";
+const alive:string = "█";
 
 var petriDish: boolean[][];
 
@@ -74,15 +74,22 @@ function runEvolution() {
 
 function renderDish() {
     let grid:string = "";
+    grid += " ┏";
+    grid += "━".repeat(numberColumns+2);
+    grid += "┓\n";
     for (let i = 0; i < numberRows; i++) {
+        grid += " ┃ "
         for (let j = 0; j < numberColumns; j++) {
             if (petriDish[i][j] === false)
                 grid += dead;
             else if (petriDish[i][j] === true)
                 grid += alive;
         }
-        grid += "\n"
+        grid += " ┃\n"
     }
+    grid += " ┗";
+    grid += "━".repeat(numberColumns+2);
+    grid += "┛";
     console.clear();
     console.log(grid);
 }
@@ -93,7 +100,7 @@ growBiofilm();
 setInterval(() => {
     runEvolution();
     renderDish();
-}, 380);
+}, 360);
 
 
 
