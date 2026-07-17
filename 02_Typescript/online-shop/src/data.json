@@ -1,0 +1,169 @@
+{
+  "customer": {
+    "id": 1,
+    "name": "Alex Morgan",
+    "email": "alex.morgan@example.com"
+  },
+  "products": [
+    {
+      "id": 101,
+      "name": "Stainless Steel Water Bottle (750ml)",
+      "price": { "value": 16.9, "currency": "EUR" },
+      "stockCount": 42
+    },
+    {
+      "id": 102,
+      "name": "Organic Green Tea (50g)",
+      "price": { "value": 8.5, "currency": "EUR" },
+      "stockCount": 120
+    },
+    {
+      "id": 103,
+      "name": "Wireless Bluetooth Earbuds",
+      "price": { "value": 49.99, "currency": "EUR" },
+      "stockCount": 18
+    },
+    {
+      "id": 104,
+      "name": "Notebook A5 (Dot Grid)",
+      "price": { "value": 6.75, "currency": "EUR" },
+      "stockCount": 65
+    },
+    {
+      "id": 105,
+      "name": "Ergonomic Desk Mat (Large)",
+      "price": { "value": 29.95, "currency": "EUR" },
+      "stockCount": 27
+    }
+  ],
+  "categories": [
+    {
+      "name": "Accessories",
+      "description": "Everyday items for home and desk",
+      "products": [
+        {
+          "id": 101,
+          "name": "Stainless Steel Water Bottle (750ml)",
+          "price": { "value": 16.9, "currency": "EUR" },
+          "stockCount": 42
+        },
+        {
+          "id": 104,
+          "name": "Notebook A5 (Dot Grid)",
+          "price": { "value": 6.75, "currency": "EUR" },
+          "stockCount": 65
+        },
+        {
+          "id": 105,
+          "name": "Ergonomic Desk Mat (Large)",
+          "price": { "value": 29.95, "currency": "EUR" },
+          "stockCount": 27
+        }
+      ]
+    },
+    {
+      "name": "Tech & Food",
+      "description": "Small comforts for focus and breaks",
+      "products": [
+        {
+          "id": 102,
+          "name": "Organic Green Tea (50g)",
+          "price": { "value": 8.5, "currency": "EUR" },
+          "stockCount": 120
+        },
+        {
+          "id": 103,
+          "name": "Wireless Bluetooth Earbuds",
+          "price": { "value": 49.99, "currency": "EUR" },
+          "stockCount": 18
+        }
+      ]
+    }
+  ],
+  "orders": [
+    {
+      "status": "confirmed",
+      "customerId": 1,
+      "items": [
+        {
+          "quantity": 2,
+          "product": {
+            "id": 102,
+            "name": "Organic Green Tea (50g)",
+            "price": { "value": 8.5, "currency": "EUR" },
+            "stockCount": 120
+          }
+        },
+        {
+          "quantity": 1,
+          "product": {
+            "id": 104,
+            "name": "Notebook A5 (Dot Grid)",
+            "price": { "value": 6.75, "currency": "EUR" },
+            "stockCount": 65
+          }
+        },
+        {
+          "quantity": 1,
+          "product": {
+            "id": 105,
+            "name": "Ergonomic Desk Mat (Large)",
+            "price": { "value": 29.95, "currency": "EUR" },
+            "stockCount": 27
+          }
+        }
+      ]
+    },
+    {
+      "status": "pending",
+      "customerId": 1,
+      "items": [
+        {
+          "quantity": 1,
+          "product": {
+            "id": 103,
+            "name": "Wireless Bluetooth Earbuds",
+            "price": { "value": 49.99, "currency": "EUR" },
+            "stockCount": 18
+          }
+        },
+        {
+          "quantity": 1,
+          "product": {
+            "id": 101,
+            "name": "Stainless Steel Water Bottle (750ml)",
+            "price": { "value": 16.9, "currency": "EUR" },
+            "stockCount": 42
+          }
+        },
+        {
+          "quantity": 3,
+          "product": {
+            "id": 104,
+            "name": "Notebook A5 (Dot Grid)",
+            "price": { "value": 6.75, "currency": "EUR" },
+            "stockCount": 65
+          }
+        },
+        {
+          "quantity": 2,
+          "product": {
+            "id": 102,
+            "name": "Organic Green Tea (50g)",
+            "price": { "value": 8.5, "currency": "EUR" },
+            "stockCount": 120
+          }
+        },
+        {
+          "quantity": 1,
+          "product": {
+            "id": 105,
+            "name": "Ergonomic Desk Mat (Large)",
+            "price": { "value": 29.95, "currency": "EUR" },
+            "stockCount": 27
+          }
+        }
+      ]
+    }
+  ]
+}
