@@ -1,0 +1,16 @@
+{
+  "name": "bun-and-nodemon",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+      "dev": "nodemon --exec bun run index.ts --watch message.txt"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "nodemon": "^3.1.14"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
