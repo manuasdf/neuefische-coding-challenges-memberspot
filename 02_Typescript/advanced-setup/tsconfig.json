@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    "target": "esnext",
+    "module": "esnext",
+    "lib": ["esnext", "dom"],
+    "types": [],
+
+    "strict": true,
+
+    "esModuleInterop": true, // allows you to import packages using the standard
+    "skipLibCheck": true,
+    "resolveJsonModule": true, 
+    "sourceMap": true,
+
+    // coding rules
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}
