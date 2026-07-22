@@ -1,0 +1,12 @@
+{
+  "name": "book-shelf",
+  "module": "src/bookService.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
