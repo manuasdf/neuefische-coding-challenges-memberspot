@@ -1,0 +1,16 @@
+{
+  "name": "asd-challenges-challenges-recap-project-1",
+  "version": "1.0.0",
+  "description": "This is the template repository for the recap project 1. It contains the source code for the IT-Book Library application. Take a look into the `./src` directory. You will find the basic HTML for your application as well as CSS for some styling.",
+  "type": "commonjs",
+  "main": "src/index.js",
+  "scripts": {
+    "run": "tsx src/index.js"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "node": "^26.5.0"
+  }
+}
