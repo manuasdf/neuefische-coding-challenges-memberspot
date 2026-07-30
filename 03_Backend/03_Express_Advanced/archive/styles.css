@@ -1,0 +1,467 @@
+/* ===========================
+ S py / Hacker Notes UI                                                                                                                                                  *
+ =========================== */
+
+:root{
+    --bg0:#04060a;
+    --bg1:#070b12;
+    --panel: rgba(6, 10, 18, .72);
+
+    --text:#c7ffdf;
+    --muted:#6bdba7;
+
+    --line: rgba(98, 255, 171, .22);
+    --line2: rgba(98, 255, 171, .10);
+
+    --green:#46ff9f;
+    --green2:#18d87b;
+    --warning:#ff3b6a;
+    --blue:#43a7ff;
+
+    --shadow: 0 0 22px rgba(70,255,159,.22);
+    --shadow2: 0 0 55px rgba(70,255,159,.14);
+    --radius: 14px;
+
+    --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+}
+
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+body{
+    margin:0;
+    font-family: var(--mono);
+    color: var(--text);
+    background:
+    /* subtle scanlines */
+    repeating-linear-gradient(
+        to bottom,
+        rgba(70,255,159,.06) 0px,
+                              rgba(70,255,159,.02) 1px,
+                              rgba(0,0,0,0) 3px,
+                              rgba(0,0,0,0) 6px
+    ),
+    /* vignette */
+    radial-gradient(1200px 600px at 50% 0%, rgba(70,255,159,.10), rgba(0,0,0,0) 60%),
+    /* base */
+    linear-gradient(180deg, var(--bg1), var(--bg0));
+    overflow-x:hidden;
+}
+
+/* Optional: if you have a root wrapper */
+.app{
+    min-height:100vh;
+    padding: 22px;
+    position:relative;
+}
+
+/* “holographic” grid overlay (pure CSS) */
+.app::before{
+    content:"";
+    position:absolute;
+    inset:-40px;
+    pointer-events:none;
+    background:
+    linear-gradient(to right, rgba(70,255,159,.10) 1px, rgba(0,0,0,0) 1px),
+    linear-gradient(to bottom, rgba(70,255,159,.10) 1px, rgba(0,0,0,0) 1px);
+    background-size: 56px 56px;
+    opacity:.10;
+    filter: blur(.2px);
+    transform: perspective(900px) rotateX(54deg) translateY(80px);
+    transform-origin: top;
+}
+
+/* Subtle noise */
+.app::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    background-image:
+    radial-gradient(circle at 20% 30%, rgba(70,255,159,.08), transparent 35%),
+    radial-gradient(circle at 80% 60%, rgba(67,167,255,.06), transparent 45%),
+    radial-gradient(circle at 50% 90%, rgba(255,59,106,.05), transparent 40%);
+    opacity:.55;
+    mix-blend-mode: screen;
+}
+
+/* ---------------------------
+ P anels / Layout                                                                                                                                                        *
+ --------------------------- */
+
+.shell{
+    position:relative;
+    z-index:2;
+    display:grid;
+    gap: 16px;
+    grid-template-columns: 340px 1fr;
+    align-items:start;
+}
+
+@media (max-width: 900px){
+    .shell{ grid-template-columns: 1fr; }
+}
+
+.panel{
+    background: var(--panel);
+    border: 1px solid var(--line2);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow2);
+    backdrop-filter: blur(8px);
+    position:relative;
+    overflow:hidden;
+}
+
+.panel::before{
+    content:"";
+    position:absolute;
+    inset:-2px;
+    border-radius: var(--radius);
+    background: linear-gradient(90deg,
+                                rgba(70,255,159,.0),
+                                rgba(70,255,159,.22),
+                                rgba(70,255,159,.0)
+    );
+    transform: translateX(-120%);
+    animation: sweep 4.5s linear infinite;
+    opacity:.35;
+}
+
+@keyframes sweep{
+    0%{ transform: translateX(-120%); }
+    60%{ transform: translateX(120%); }
+    100%{ transform: translateX(120%); }
+}
+
+.panelHeader{
+    padding: 14px 16px 10px;
+    border-bottom:1px solid var(--line2);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 10px;
+}
+
+.title{
+    font-size: 12px;
+    letter-spacing: .26em;
+    text-transform: uppercase;
+    color: rgba(199,255,223,.95);
+}
+
+.status{
+    font-size: 12px;
+    color: rgba(70,255,159,.95);
+    text-shadow: 0 0 10px rgba(70,255,159,.28);
+    display:flex;
+    align-items:center;
+    gap: 8px;
+}
+.dot{
+    width: 9px;
+    height: 9px;
+    border-radius: 999px;
+    background: var(--green);
+    box-shadow: 0 0 18px rgba(70,255,159,.55);
+    animation: pulse 1.6s ease-in-out infinite;
+}
+@keyframes pulse{
+    0%,100%{ transform: scale(.92); opacity:.85; }
+    50%{ transform: scale(1.15); opacity:1; }
+}
+
+.panelBody{
+    padding: 14px 16px 16px;
+}
+
+/* ---------------------------
+ N otes list                                                                                                                                                             *
+ --------------------------- */
+
+.notesList{
+    display:flex;
+    flex-direction:column;
+    gap: 12px;
+}
+
+.note{
+    padding: 12px 12px;
+    border-radius: 12px;
+    background: rgba(0,0,0,.20);
+    border: 1px dashed rgba(98,255,171,.22);
+    position:relative;
+    overflow:hidden;
+}
+
+.note::after{
+    content:"";
+    position:absolute;
+    left:-30%;
+    top:-60%;
+    width: 70%;
+    height: 160%;
+    background: linear-gradient(90deg, rgba(70,255,159,0), rgba(70,255,159,.22), rgba(70,255,159,0));
+    transform: rotate(18deg);
+    opacity:.35;
+    animation: shimmer 6s ease-in-out infinite;
+}
+@keyframes shimmer{
+    0%,55%{ transform: translateX(-20%) rotate(18deg); opacity:.10; }
+    70%{ opacity:.40; }
+    100%{ transform: translateX(70%) rotate(18deg); opacity:.10; }
+}
+
+.noteTitle{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap: 12px;
+    margin-bottom: 6px;
+}
+
+.noteTitle span:first-child{
+    font-size: 12px;
+    letter-spacing:.14em;
+    text-transform: uppercase;
+    color: rgba(199,255,223,.95);
+}
+.noteTitle span:last-child{
+    font-size: 12px;
+    color: rgba(107,219,167,.85);
+    opacity:.9;
+}
+
+.noteText{
+    margin:0;
+    font-size: 13px;
+    line-height:1.45;
+    color: rgba(199,255,223,.92);
+    text-shadow: 0 0 10px rgba(70,255,159,.10);
+}
+
+/* ---------------------------
+ S ecret links                                                                                                                                                           *
+ --------------------------- */
+
+.secretLinks{
+    display:flex;
+    flex-direction:column;
+    gap: 10px;
+}
+
+.secretLink{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(98,255,171,.22);
+    background:
+    linear-gradient(180deg, rgba(70,255,159,.10), rgba(0,0,0,.18));
+    text-decoration:none;
+    color: rgba(199,255,223,.95);
+    box-shadow: 0 0 20px rgba(70,255,159,.12);
+    transition: transform .12s ease, border-color .12s ease, box-shadow .12s ease, background .12s ease;
+    position:relative;
+    overflow:hidden;
+}
+
+.secretLink::before{
+    content:"";
+    position:absolute;
+    inset:-1px;
+    background: linear-gradient(90deg,
+                                rgba(70,255,159,0),
+                                rgba(70,255,159,.30),
+                                rgba(70,255,159,0)
+    );
+    transform: translateX(-120%);
+    opacity:.35;
+    transition: opacity .12s ease;
+}
+
+.secretLink:hover{
+    transform: translateY(-1px);
+    border-color: rgba(70,255,159,.48);
+    box-shadow: 0 0 30px rgba(70,255,159,.28);
+    background:
+    linear-gradient(180deg, rgba(70,255,159,.16), rgba(0,0,0,.22));
+}
+
+.secretLink:hover::before{
+    animation: linkSweep .9s ease forwards;
+}
+
+@keyframes linkSweep{
+    0%{ transform: translateX(-120%); }
+    100%{ transform: translateX(120%); }
+}
+
+.secretLeft{
+    display:flex;
+    flex-direction:column;
+    gap: 4px;
+    min-width:0;
+}
+.secretLabel{
+    font-size: 12px;
+    letter-spacing:.18em;
+    text-transform: uppercase;
+    opacity:.95;
+}
+.secretPath{
+    font-size: 12px;
+    color: rgba(107,219,167,.88);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    opacity:.95;
+}
+
+.secretBadge{
+    font-size: 11px;
+    letter-spacing:.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.82);
+    background: rgba(70,255,159,.14);
+    border: 1px solid rgba(70,255,159,.28);
+    padding: 6px 9px;
+    border-radius: 999px;
+    box-shadow: 0 0 18px rgba(70,255,159,.10);
+}
+
+/* ---------------------------
+ H uge input field                                                                                                                                                       *
+ --------------------------- */
+
+.mainStage{
+    padding: 0;
+}
+
+.hero{
+    padding: 16px;
+}
+
+.bigInputWrap{
+    position:relative;
+    border-radius: calc(var(--radius) + 2px);
+    border: 1px solid rgba(98,255,171,.30);
+    background:
+    linear-gradient(180deg, rgba(70,255,159,.10), rgba(0,0,0,.26));
+    box-shadow: var(--shadow), var(--shadow2);
+    overflow:hidden;
+}
+
+.bigInputWrap::before{
+    content:"";
+    position:absolute;
+    inset:-2px;
+    background:
+    radial-gradient(900px 240px at 50% 0%, rgba(70,255,159,.22), transparent 60%),
+    repeating-linear-gradient(
+        to bottom,
+        rgba(70,255,159,.10) 0px,
+                              rgba(70,255,159,.02) 1px,
+                              rgba(0,0,0,0) 3px
+    );
+    opacity:.40;
+    pointer-events:none;
+}
+
+.bigInputWrap::after{
+    content:"";
+    position:absolute;
+    left:-20%;
+    top:-10%;
+    width: 60%;
+    height: 130%;
+    background: linear-gradient(90deg, rgba(67,167,255,0), rgba(67,167,255,.22), rgba(67,167,255,0));
+    transform: rotate(10deg);
+    opacity:.25;
+    animation: glassSweep 7.2s ease-in-out infinite;
+    pointer-events:none;
+}
+
+@keyframes glassSweep{
+    0%,45%{ transform: translateX(-15%) rotate(10deg); opacity:.10; }
+    60%{ opacity:.30; }
+    100%{ transform: translateX(160%) rotate(10deg); opacity:.10; }
+}
+
+.bigInput{
+    position:relative;
+    z-index:2;
+    width: 100%;
+    min-height: calc(100vh - 120px);
+    display:block;
+
+    padding: 26px 20px;
+    border:0;
+    outline:none;
+    resize:none;
+
+    font-family: var(--mono);
+    font-size: clamp(22px, 3.2vw, 44px);
+    line-height: 1.25;
+    color: rgba(199,255,223,.98);
+
+    background: transparent;
+    caret-color: var(--green);
+}
+
+.bigInput::placeholder{
+    color: rgba(107,219,167,.52);
+}
+
+.bigInputMeta{
+    display:flex;
+    justify-content:space-between;
+    gap: 12px;
+    margin-top: 10px;
+    padding: 0 6px 8px;
+    color: rgba(107,219,167,.85);
+    font-size: 12px;
+    letter-spacing:.08em;
+    text-transform: uppercase;
+}
+
+.kbd{
+    display:inline-flex;
+    align-items:center;
+    gap: 8px;
+    background: rgba(0,0,0,.25);
+    border: 1px solid rgba(98,255,171,.18);
+    border-radius: 10px;
+    padding: 8px 10px;
+    box-shadow: 0 0 18px rgba(70,255,159,.08);
+}
+
+.kbdKey{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width: 28px;
+    height: 26px;
+    padding: 0 8px;
+    border-radius: 9px;
+    background: rgba(70,255,159,.10);
+    border: 1px solid rgba(70,255,159,.24);
+    color: rgba(199,255,223,.95);
+}
+
+/* ---------------------------
+ T iny “terminal” footer                                                                                                                                                 *
+ --------------------------- */
+
+.footerLine{
+    margin-top: 12px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: rgba(107,219,167,.78);
+    border-top: 1px solid rgba(98,255,171,.12);
+    background: rgba(0,0,0,.14);
+}
+
+.monoGlow{
+    text-shadow: 0 0 18px rgba(70,255,159,.24);
+}

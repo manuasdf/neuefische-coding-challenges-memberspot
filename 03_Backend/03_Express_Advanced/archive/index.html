@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Spy Notes UI</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+  <div class="app">
+    <div class="shell">
+      <!-- Left column: notes + secret links -->
+      <aside class="panel" aria-label="Notes and secret links">
+        <div class="panelHeader">
+          <div class="title">signal board</div>
+          <div class="status">
+            <span class="dot" aria-hidden="true"></span>
+            <span>listening</span>
+          </div>
+        </div>
+
+        <div class="panelBody">
+          <div class="notesList">
+            <div class="note">
+              <div class="noteTitle">
+                <span>note 01</span>
+                <span>cipher ok</span>
+              </div>
+              <p class="noteText">
+                The key is not the password—it's the pattern.
+                Keep the noise; remove the noise.
+              </p>
+            </div>
+
+            <div class="note">
+              <div class="noteTitle">
+                <span>note 02</span>
+                <span>offline</span>
+              </div>
+              <p class="noteText">
+                Route through the quiet channel. No fingerprints.
+                No logs. Only intent.
+              </p>
+            </div>
+
+            <div class="note">
+              <div class="noteTitle">
+                <span>note 03</span>
+                <span>active</span>
+              </div>
+              <p class="noteText">
+                If it blinks, it watches.
+                If it whispers, it remembers.
+              </p>
+            </div>
+          </div>
+
+          <div style="height:14px"></div>
+
+          <div class="secretLinks" aria-label="Secret links">
+            <a class="secretLink" href="#" title="Secret link (demo)">
+              <div class="secretLeft">
+                <div class="secretLabel">secret endpoint</div>
+                <div class="secretPath">/vault/alpha/signal</div>
+              </div>
+              <div class="secretBadge">UNLOCK</div>
+            </a>
+
+            <a class="secretLink" href="#" title="Secret link (demo)">
+              <div class="secretLeft">
+                <div class="secretLabel">private route</div>
+                <div class="secretPath">/ops/telemetry/ghost</div>
+              </div>
+              <div class="secretBadge">ACCESS</div>
+            </a>
+
+            <a class="secretLink" href="#" title="Secret link (demo)">
+              <div class="secretLeft">
+                <div class="secretLabel">masked link</div>
+                <div class="secretPath">/relay/cascade/redacted</div>
+              </div>
+              <div class="secretBadge">OPEN</div>
+            </a>
+          </div>
+
+          <div class="footerLine monoGlow">
+            status: <span style="color: rgba(199,255,223,.95)">ready</span> • channel:
+            <span style="color: rgba(70,255,159,.95)">green</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Right column: huge input -->
+      <main class="panel mainStage" aria-label="Main console">
+        <div class="panelHeader">
+          <div class="title">console</div>
+          <div class="status">
+            <span class="dot" aria-hidden="true"></span>
+            <span>secure session</span>
+          </div>
+        </div>
+
+        <div class="panelBody hero">
+          <div class="bigInputWrap">
+            <textarea
+              class="bigInput"
+              spellcheck="false"
+              placeholder="type your message… (this is a demo textarea)"
+            ></textarea>
+          </div>
+
+          <div class="bigInputMeta" aria-hidden="true">
+            <div class="kbd">
+              <span class="kbdKey">⌘</span>
+              <span class="kbdKey">K</span>
+              <span>command</span>
+            </div>
+            <div class="kbd">
+              <span class="kbdKey">↵</span>
+              <span>send</span>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

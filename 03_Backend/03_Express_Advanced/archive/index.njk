@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Signal Relay // N-Relay</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+
+  <body>
+    <div class="bg-grid" aria-hidden="true"></div>
+    <div class="scanlines" aria-hidden="true"></div>
+    <div class="vignette" aria-hidden="true"></div>
+
+    <main class="app">
+      <header class="topbar">
+        <div class="brand">
+          <span class="dot"></span>
+          <div class="title-wrap">
+            <div class="title">N-Relay</div>
+            <div class="subtitle">hacker/spy single-page relay</div>
+          </div>
+        </div>
+
+        <div class="status">
+          <span class="pill online">LINK: ONLINE</span>
+          <span class="pill">MODE: STEALTH</span>
+        </div>
+      </header>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h1 class="panel-title">Transmit Message</h1>
+          <div class="panel-meta">
+            <span class="meta-item">Noisy channel</span>
+            <span class="meta-item">Local demo UI</span>
+          </div>
+        </div>
+
+        <!-- The recipient can open a message "in return" via a link.
+             This UI uses Nunjucks templates for the message input and output views. -->
+
+        <!-- INPUT TEMPLATE -->
+        <!-- Render this block as the transmitter view with Nunjucks -->
+        <form class="card" id="inputView">
+          <div class="card-head">
+            <div class="chip">TX</div>
+            <div class="card-title">Compose Payload</div>
+            <div class="card-subtitle">Enter a message to generate a share link</div>
+          </div>
+
+          <div class="big-field">
+            <!-- Nunjucks template: input.njk -->
+            <!-- The server would render this into the HTML response. -->
+            <div style="display:none">
+              {# input.njk (template) #}
+            </div>
+            <!-- Example template output (what Nunjucks would produce): -->
+            <label class="sr-only" for="messageInput">Message</label>
+            <textarea
+              id="messageInput"
+              name="message"
+              class="giant-input"
+              placeholder="Type your message here..."
+              spellcheck="false"
+              autocomplete="off"
+            >{{ message or '' }}</textarea>
+
+            <div class="hint-row">
+              <span class="hint">Use deliberate phrasing. Keep it short.</span>
+              <span class="hint right">MAX: 4000 chars</span>
+            </div>
+          </div>
+
+          <div class="row">
+            <button type="button" class="btn primary" id="btnGenerate">Generate Link</button>
+            <button type="button" class="btn ghost" id="btnClear">Clear</button>
+          </div>
+
+          <div class="link-box" aria-live="polite">
+            <div class="link-label">Share Link</div>
+            <input
+              class="link-input"
+              id="shareLink"
+              type="text"
+              value="{{ shareLink or '' }}"
+              placeholder="A link will appear here..."
+              readonly
+            />
+            <div class="row split">
+              <button type="button" class="btn teal" id="btnCopy">Copy Link</button>
+              <a class="btn ghost" id="btnPreview" href="#" target="_self">Preview as Recipient</a>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <footer class="footer">
+        <div class="foot-left">“They can’t read it if the signal is buried.”</div>
+        <div class="foot-right">
+          <span class="mono">v0.1</span>
+          <span class="sep">•</span>
+          <span class="mono">static UI</span>
+        </div>
+      </footer>
+    </main>
+
+    <script>
+      // UI-only demo logic (no backend). Replace with your own link/recipient flow.
+      // This script keeps this as a single static HTML shell.
+      const $ = (s) => document.querySelector(s);
+
+      const input = $("#messageInput");
+      const link = $("#shareLink");
+      const btnGenerate = $("#btnGenerate");
+      const btnClear = $("#btnClear");
+      const btnCopy = $("#btnCopy");
+      const btnPreview = $("#btnPreview");
+
+      const base = location.origin + location.pathname;
+
+      function buildLink(payload) {
+        // Demo-only: encodes payload directly into the URL hash.
+        // In a real app, you'd generate a short token and store the message server-side.
+        const enc = btoa(unescape(encodeURIComponent(payload))).replace(/=+$/, "");
+        return `${base}#m=${encodeURIComponent(enc)}`;
+      }
+
+      btnGenerate?.addEventListener("click", () => {
+        const msg = (input.value || "").trim();
+        link.value = msg ? buildLink(msg) : "";
+        if (btnPreview) btnPreview.href = link.value || "#";
+      });
+
+      btnClear?.addEventListener("click", () => {
+        input.value = "";
+        link.value = "";
+        if (btnPreview) btnPreview.href = "#";
+      });
+
+      btnCopy?.addEventListener("click", async () => {
+        if (!link.value) return;
+        try {
+          await navigator.clipboard.writeText(link.value);
+          btnCopy.textContent = "Copied";
+          setTimeout(() => (btnCopy.textContent = "Copy Link"), 900);
+        } catch (e) {
+          link.select();
+        }
+      });
+
+      function maybeRenderRecipient() {
+        const hash = location.hash || "";
+        const mMatch = hash.match(/#m=([^&]+)/);
+        if (!mMatch) return;
+
+        const enc = decodeURIComponent(mMatch[1]);
+        try {
+          const padded = enc + "===".slice((enc.length + 3) % 4);
+          const decoded = decodeURIComponent(escape(atob(padded)));
+          // In a real app, you'd render the output.njk template on the server.
+          // Here we inject a fake recipient card.
+          const panel = document.querySelector(".panel");
+          const old = document.getElementById("inputView");
+          if (old) old.style.display = "none";
+
+          const card = document.createElement("section");
+          card.className = "card";
+          card.innerHTML = `
+            <div class="card-head">
+              <div class="chip">RX</div>
+              <div class="card-title">Received Message</div>
+              <div class="card-subtitle">Channel validated • payload decrypted</div>
+            </div>
+
+            <div class="big-field">
+              <div class="received-meta">
+                <span class="meta-item">FROM: unknown</span>
+                <span class="meta-item">TIMESTAMP: ${new Date().toLocaleString()}</span>
+              </div>
+              <pre class="message-pre">${decoded
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")}</pre>
+              <div class="hint-row">
+                <span class="hint">Tip: forward the link to the next node.</span>
+                <span class="hint right">Demo payload</span>
+              </div>
+            </div>
+
+            <div class="row">
+              <button type="button" class="btn teal" id="btnBack">Back to TX</button>
+              <button type="button" class="btn ghost" id="btnWipe">Wipe Screen</button>
+            </div>
+          `;
+          panel.appendChild(card);
+
+          card.querySelector("#btnBack")?.addEventListener("click", () => {
+            history.pushState("", document.title, base);
+            location.reload();
+          });
+
+          card.querySelector("#btnWipe")?.addEventListener("click", () => {
+            const pre = card.querySelector(".message-pre");
+            if (pre) pre.textContent = "[wiped]";
+          });
+        } catch {
+          // ignore
+        }
+      }
+
+      maybeRenderRecipient();
+    </script>
+  </body>
+</html>

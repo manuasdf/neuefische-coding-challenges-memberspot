@@ -1,0 +1,28 @@
+{% extends "index.njk" %}
+
+{% block output %}
+<section class="card">
+  <div class="card-head">
+    <div class="chip">RX</div>
+    <div class="card-title">Received Message</div>
+    <div class="card-subtitle">Channel validated • payload decrypted</div>
+  </div>
+
+  <div class="big-field">
+    <div class="received-meta">
+    </div>
+
+    <pre class="message-pre">{{ message or '' }}</pre>
+
+    <div class="hint-row">
+      <span class="hint">Tip: forward the link to the next node.</span>
+      <span class="hint right">Preview</span>
+    </div>
+  </div>
+
+  <div class="row">
+    <a class="btn teal" href="/">Back to TX</a>
+    <button type="button" class="btn ghost" onclick="document.querySelector('.message-pre').textContent='[wiped]'">Wipe Screen</button>
+  </div>
+</section>
+{% endblock %}

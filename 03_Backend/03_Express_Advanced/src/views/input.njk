@@ -1,0 +1,49 @@
+{% extends "index.njk" %}
+
+{% block input %}
+<form class="card" id="messageForm">
+  <div class="card-head">
+    <div class="chip">TX</div>
+    <div class="card-title">Compose Payload</div>
+    <div class="card-subtitle">Enter a message to generate a share link</div>
+  </div>
+
+  <div class="big-field">
+    <label class="sr-only" for="messageInput">Message</label>
+    <textarea
+      id="messageInput"
+      name="message"
+      class="giant-input"
+      placeholder="Type your message here..."
+      spellcheck="false"
+      autocomplete="off"
+    >{{ message or '' }}</textarea>
+
+    <div class="hint-row">
+      <span class="hint">Use deliberate phrasing. Keep it short.</span>
+      <span class="hint right">MAX: 4000 chars</span>
+    </div>
+  </div>
+
+  <div class="row">
+    <button class="btn primary" id="generateLink">Generate Link</button>
+    <button type="reset" class="btn ghost">Clear</button>
+  </div>
+
+  <div class="link-box" aria-live="polite">
+    <div class="link-label">Share Link</div>
+    <input
+      class="link-input"
+      id="shareLink"
+      type="text"
+      name="shareLink"
+      value="{{ shareLink or '' }}"
+      placeholder="A link will appear here..."
+      readonly
+    />
+    <div class="row split">
+      <button type="button" class="btn teal" onclick="navigator.clipboard.writeText(this.closest('.link-box').querySelector('input[name=shareLink]').value)">Copy Link</button>
+    </div>
+  </div>
+</form>
+{% endblock %}
