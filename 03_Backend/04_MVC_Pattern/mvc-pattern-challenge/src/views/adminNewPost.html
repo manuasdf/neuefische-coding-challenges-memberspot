@@ -1,0 +1,14 @@
+<!--main_content-->
+{% extends "_baseLayout.html" %}
+{% block main_content %}
+  <div class="container px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        
+        {% import "formTextarea.html" as form %}
+        {{ form.formTextarea(formId='new-form', textareaId='new-text', label='New Post Entry', placeholder='Enter new blog entry here...') }}
+
+      </div>
+    </div>
+  </div>
+{% endblock main_content %}

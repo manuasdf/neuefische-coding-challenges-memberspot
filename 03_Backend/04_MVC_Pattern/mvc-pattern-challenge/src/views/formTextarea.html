@@ -1,0 +1,17 @@
+{% macro formTextarea(formId, textareaId, label, palceholder) %}
+  <div class="form-floating">
+    <form>
+
+    <label for="{{ id }}">{{ label }}</label>
+
+    <textarea
+      class="form-control"
+      id="{{ id }}"
+      placeholder="{{ palceholder }}"
+    ></textarea>
+
+    <button type="submit">Upload post</button>
+
+    </form>
+  </div>
+{% endmacro %}
