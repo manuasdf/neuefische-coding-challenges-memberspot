@@ -20,6 +20,7 @@ Useful review questions while building:
 
 * Which part of the app should create the file name or ID?
     * The file name has to be created by the client to be able to create the link that references the file.
+    * Or the backend replies with the name that has been created on the backend side. Either is possible.
 * Where should files be stored so the path stays predictable?
     * The files should be stored on the server in some subdirectory following the root-dir. process.cwd() is most reliable. 
 * What should happen if a user opens an expired or missing link?
