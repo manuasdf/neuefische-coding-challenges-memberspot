@@ -1,0 +1,11 @@
+{% macro formTextarea(id, label, palceholder, value) %}
+    <label for="{{ id }}">{{ label }}</label>
+
+    <textarea
+      class="form-control"
+      name="{{ id }}"
+      id="{{ id }}"
+      placeholder="{{ palceholder }}"
+    >{{ value }}</textarea>
+
+{% endmacro %}

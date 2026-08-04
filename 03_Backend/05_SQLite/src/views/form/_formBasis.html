@@ -1,0 +1,14 @@
+{% macro formTextarea(formId, textareaId, label, palceholder) %}
+  <div class="form-floating">
+    <form>
+
+        {% block inputs %}
+
+        {% endblock %}
+
+
+    <button type="submit">Upload post</button>
+
+    </form>
+  </div>
+{% endmacro %}
