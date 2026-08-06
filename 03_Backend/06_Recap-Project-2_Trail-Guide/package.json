@@ -1,0 +1,36 @@
+{
+  "name": "trail-guide",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/app.js",
+  "allowScripts": {
+    "sqlite3@6.0.1": true,
+    "esbuild@0.27.7": true
+  },
+  "scripts": {
+    "dev": "tsx watch --env-file=.env src/app.ts",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "db:seed": "sqlite3 data/trail-guide.db < data/seed.sql"
+  },
+  "keywords": ["trail guide", "express", "mvc", "sql"],
+  "author": "Manuel Lehmann",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "express": "^5.2.1",
+    "nunjucks": "^3.2.4",
+    "sanitize-html": "^2.17.6",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^6.0.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^24.10.1",
+    "@types/nunjucks": "^3.2.6",
+    "@types/sanitize-html": "^2.16.1",
+    "@types/sqlite3": "^3.1.11",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3"
+  }
+}

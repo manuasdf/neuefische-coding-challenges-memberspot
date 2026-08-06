@@ -1,0 +1,15 @@
+{% macro trailCard(trail) %}
+<article>
+    id: {{ trail.id }},&nbsp;
+    region_id: {{ trail.region_id }},&nbsp;
+    title: {{ trail.title }},&nbsp;
+    slug: {{ trail.slug }},&nbsp;
+    difficulty: {{ trail.difficulty }},&nbsp;
+    distance_km: {{ trail.distance_km }},&nbsp;
+    description: {{ trail.description }},&nbsp;
+    image_url: {{ trail.image_url }},&nbsp;
+    created_at: {{ trail.created_at }},&nbsp;
+    region_name: {{ trail.region_name }},&nbsp;
+    region_country: {{ trail.region_country }}&nbsp;
+</article>
+{% endmacro %}

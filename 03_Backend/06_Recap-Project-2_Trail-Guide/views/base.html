@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="This project is a small web service for hiking trails called Trail Guide. Visitors browse trails and an admin user manages the catalog through a separate interface. External developers can read and write data through an API." />
+    <meta name="author" content="Manuel Lehmann" />
+    <title>Trip Guide</title>
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+    </head>
+    <body>
+        {% block body %}
+        <header class="header" id="header">
+            {% block header %}{% endblock %}
+         </header>
+         <nav class="nav"></nav>
+
+         <main class="content">
+            {% block content %}{% endblock %}
+         </main>
+
+         <footer class="footer">
+            {% block footer %}{% endblock %}
+         </footer>
+        {% endblock %}
+    </body>
+</html>
