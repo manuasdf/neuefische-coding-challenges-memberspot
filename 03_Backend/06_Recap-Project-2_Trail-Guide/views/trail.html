@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% import "macros/trailCard.html" as trailMacros %}
+
+{% block content %}
+    <div>
+        <button onclick="history.back()">Go Back</button>
+    </div>
+    <h1>One Trail</h1>
+    {{ trailMacros.trailCard(trail) }}
+{% endblock %}

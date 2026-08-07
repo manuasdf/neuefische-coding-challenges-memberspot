@@ -1,5 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-EXAMPLE CONTENT
+    <h1>All Regions</h1>
+    {% for region in regions %}
+        <a href="regions/{{region.slug}}">
+            <article>
+                <span>{{region.country}}</span>
+                <h2>{{region.name}}</h2>
+                <p>{{region.description}}</p>
+            </article>
+        </a>
+    {% endfor %}
 {% endblock %}

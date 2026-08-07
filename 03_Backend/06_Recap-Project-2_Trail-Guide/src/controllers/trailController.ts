@@ -6,49 +6,71 @@ import {
 import { getRegionBySlug } from "../models/regionModel";
 import type { Request, Response } from 'express';
 
+type TParamSlug = {
+  slug: string
+}
+
+function formatDate(unix: number | undefined): string {
+    if (typeof unix === undefined) 
+        return ""; 
+    return new Date(unix as number * 1000).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    });
+}
+
 export async function displayAllTrails(_req: Request, res: Response) {
   const trails = await getAllTrails();
   if (!trails) {
     res.status(404).send("No trails to display");
     return;
   }
-  res.render("index.html", {trails: trails});
+  const formatedTrails = trails.map((trail) => ({
+        ...trail,
+        created_at: formatDate(trail.created_at)
+    }));
+  res.render("index.html", {trails: formatedTrails});
 };
 
-export async function displayTrail(req: Request, res: Response) {
-    const slug:string = Array.isArray(req.params.slug) 
-        ? req.params.slug[0] ?? "" 
-        : req.params.slug;
+export async function displayTrail(req: Request<TParamSlug>, res: Response) {
+  const slug = req.params.slug;
   if (!slug) {
     res.status(400).send("Invalid slug");
     return;
   }
   const trail = await getTrailBySlug(slug);
   if (!trail) {
-    res.status(404).send("Trail not found");
+    res.status(404).send("No trail for slug found");
     return;
   }
-  res.render("trail.html",  trail);
+  const formatedTrail = {
+        ...trail,
+        created_at: formatDate(trail.created_at)
+    };
+  res.render("trail.html",  {trail: formatedTrail});
 };
 
 
-export async function displayTrailsByRegion(req: Request, res: Response) {
-    const slug:string = Array.isArray(req.params.slug) 
-        ? req.params.slug[0] ?? "" 
-        : req.params.slug;
+export async function displayTrailsByRegion(req: Request<TParamSlug>, res: Response) {
+  const slug = req.params.slug;
   if (!slug) {
     res.status(400).send("Invalid slug");
     return;
   }
   const region = await getRegionBySlug(slug);
   if (!region) {
-    res.status(404).send("Region for Trails not found");
+    res.status(404).send("No region for slug found");
     return;
   }
-  const trail = await getTrailsByRegionId(region.id.toString());
-  if (!trail) {
-    res.status(404).send("Trail by region-id not found");
+  const trails = await getTrailsByRegionId(region.id.toString());
+  if (!trails) {
+    res.status(404).send("No trail for region-id found");
     return;
   }
-  res.render("trail.html",  trail);
+  const formatedTrails = trails.map((trail) => ({
+        ...trail,
+        created_at: formatDate(trail.created_at)
+    }));
+  res.render("region.html",  {region: region, trails: formatedTrails});
 };

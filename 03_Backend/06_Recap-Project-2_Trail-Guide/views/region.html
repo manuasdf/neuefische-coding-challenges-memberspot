@@ -1,5 +1,15 @@
 {% extends "base.html" %}
+{% import "macros/trailCard.html" as trailMacros %}
 
 {% block content %}
-EXAMPLE CONTENT
+    <h1>One Regions</h1>
+        <article>
+            <span>{{trails.country}}</span>
+            <h2>{{region.name}}</h2>
+            <p>{{region.description}}</p>
+            <h3>Trails:</h3>
+            {% for trail in trails %}
+                {{ trailMacros.trailCard(trail) }}
+            {% endfor %}
+        </article>
 {% endblock %}

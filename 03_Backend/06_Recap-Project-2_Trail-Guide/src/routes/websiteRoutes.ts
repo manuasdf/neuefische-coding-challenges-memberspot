@@ -28,6 +28,6 @@ websiteRoutes.get("/regions", displayAllRegions);
 /* 
 * GET /regions/:slug shows a single region with its trails
 */
-websiteRoutes.post("/regions/:slug", displayTrailsByRegion);
+websiteRoutes.get("/regions/:slug", displayTrailsByRegion);
 
 export default websiteRoutes;

@@ -1,10 +1,12 @@
 import express from "express";
-// import { Response } from "express";
 import nunjucks from "nunjucks";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { connectDB, closeDB } from "./models/db";
 import websiteRoutes from "./routes/websiteRoutes";
+import adminRoutes from "./routes/adminRoutes";
+import apiRoutes from "./routes/apiRoutes";
+import { ensureLogFile, logger } from "./middleware/logger";
 
 const app = express();
 
@@ -24,7 +26,13 @@ nunjucks.configure(viewsDir, {
   express: app 
 });
 
+await ensureLogFile();
+app.use(logger);
+app.use(express.json());
+
 app.use("/", websiteRoutes);
+app.use("/admin", adminRoutes);
+app.use("/api", apiRoutes);
 
 const port = Number(process.env.PORT) || 3000;
 

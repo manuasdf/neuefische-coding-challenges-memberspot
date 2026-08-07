@@ -16,13 +16,25 @@ interface Trail {
     regions_description?: string
 }
 
-type Difficulty = "small" | "medium" | "large";
+type Difficulty = "easy" | "moderate" | "hard";
+type Filter = {
+    region: string | undefined,
+    difficulty: Difficulty | undefined
+}
 
 const DEBUG = process.env.DEBUG || false;
+
+function slugify(title: string): string {
+    return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
 
 const SQLTemplateGetAllTrails = `
     SELECT 
         trails.id,
+        trails.region_id,
         trails.title,
         trails.slug,
         trails.difficulty,
@@ -47,6 +59,32 @@ async function getAllTrails(): Promise<Trail[]> {
     try {
         const db = getDB();
         trails = await db.all<Trail[]>(SQLTemplateGetAllTrails);
+    } catch (err) {
+        if (DEBUG) {
+            console.error(`Fetch trail data failed:`, err)
+            throw err;
+        }
+    }
+    return trails;
+}
+
+async function getAllTrailsApplyFilter(filter: Filter): Promise<Trail[]> {
+    let trails: Trail[] = [];
+    try {
+        const db = getDB();
+        let filterArray: string[] = [];
+        if (filter.region)
+            filterArray.push(`regions_slug = @region_slug`)
+        if (filter.difficulty) 
+            filterArray.push(`trails.difficulty = @difficulty`)
+        const filterString = filterArray.join(" AND ");
+        trails = await db.all<Trail[]>(SQLTemplateGetAllTrails + `
+            WHERE
+                ${filterString}
+            `, {
+                "@region_slug": filter.region,
+                "@difficulty": filter.difficulty,
+            });
     } catch (err) {
         if (DEBUG) {
             console.error(`Fetch trail data failed:`, err)
@@ -90,8 +128,111 @@ async function getTrailsByRegionId(regionId: string): Promise<Trail[]> {
     return trails;
 }
 
+async function getTrailById(id: number): Promise<Trail | undefined> {
+    let trail:Trail | undefined = undefined;
+    try {
+        const db = getDB();
+        trail = await db.get<Trail>(SQLTemplateGetAllTrails + `
+            WHERE
+                trails.id = ?
+            `, [id]);
+    } catch (err) {
+        if (DEBUG) {
+            console.error(`Fetch trail data failed:`, err)
+            throw err;
+        }
+    }
+    return trail;
+}
+
+async function addTrail(trail: Trail): Promise<number> {
+  const db = getDB();
+  const result = await db.run(
+    `INSERT INTO 
+        trails 
+    (
+        region_id, 
+        title, 
+        slug, 
+        difficulty, 
+        distance_km, 
+        description, 
+        image_url, 
+        created_at
+    )
+     VALUES (
+        @region_id,
+        @title,
+        @slug,
+        @difficulty,
+        @distance_km,
+        @description,
+        @image_url,
+        @created_at
+    )`,
+    {
+        "@region_id": trail.region_id,
+        "@title": trail.title,
+        "@slug": slugify(trail.title),
+        "@difficulty": trail.difficulty,
+        "@distance_km": trail.distance_km,
+        "@description": trail.description,
+        "@image_url": trail.image_url,
+        "@created_at": Date.now(),
+    },
+  );
+  return result.lastID!;
+}
+
+async function updateTrail(id: number, trail: Trail): Promise<number> {
+  const db = getDB();
+  const result = await db.run(
+    `UPDATE 
+        trails
+    SET
+        region_id = @region_id, 
+        title = @title, 
+        slug = @slug, 
+        difficulty = @difficulty, 
+        distance_km = @distance_km, 
+        description = @description, 
+        image_url = @image_url, 
+        created_at = @created_at
+    WHERE
+        id = @id`,
+    {
+        "@region_id": trail.region_id,
+        "@title": trail.title,
+        "@slug": slugify(trail.title),
+        "@difficulty": trail.difficulty,
+        "@distance_km": trail.distance_km,
+        "@description": trail.description,
+        "@image_url": trail.image_url,
+        "@created_at": Date.now(),
+        "@id": id,
+    },
+  );
+  return result.changes!;
+}
+
+async function deleteTrail(id: number): Promise<number> {
+    const db = getDB();
+    const result = await db.run(`DELETE FROM trails WHERE id = @id`, { "@id": id });
+    return result.changes!;
+}
+
 export {
     getAllTrails,
+    getAllTrailsApplyFilter,
     getTrailBySlug,
-    getTrailsByRegionId
+    getTrailsByRegionId,
+    getTrailById,
+    addTrail,
+    updateTrail,
+    deleteTrail
+}
+
+export type { 
+    Difficulty,
+    Filter
 }

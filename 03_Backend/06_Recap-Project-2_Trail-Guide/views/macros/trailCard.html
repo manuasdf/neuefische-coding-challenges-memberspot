@@ -1,15 +1,14 @@
 {% macro trailCard(trail) %}
-<article>
-    id: {{ trail.id }},&nbsp;
-    region_id: {{ trail.region_id }},&nbsp;
-    title: {{ trail.title }},&nbsp;
-    slug: {{ trail.slug }},&nbsp;
-    difficulty: {{ trail.difficulty }},&nbsp;
-    distance_km: {{ trail.distance_km }},&nbsp;
-    description: {{ trail.description }},&nbsp;
-    image_url: {{ trail.image_url }},&nbsp;
-    created_at: {{ trail.created_at }},&nbsp;
-    region_name: {{ trail.region_name }},&nbsp;
-    region_country: {{ trail.region_country }}&nbsp;
+<article style="overflow: hidden; cursor: pointer;" onclick="window.location = 'trails/{{trail.slug}}';">
+    <div style="float: right; margin-left: 1em; margin-bottom: 1em;">
+        <img src="{{ trail.image_url }}" alt="{{ trail.title }}" style="max-width: 200px; height: auto; border-radius: .5em;">
+    </div>
+    <div style="margin-right: 210px;">
+        <span style="background: {% if trail.difficulty === 'hard' %}red{% elseif trail.difficulty === 'moderate' %}yellow{% elseif trail.difficulty === 'easy' %}green{% else %}grey{% endif %}; padding: .25em 1em; border-radius: .5em;">{{ trail.difficulty }}</span> 
+        <h3>{{ trail.title }}</h3>
+        <p>{{ trail.description | safe }}</p>
+        <p>Distance: {{ trail.distance_km }} km</p>
+        <small>{{ trail.created_at }}</small>
+    </div>
 </article>
 {% endmacro %}

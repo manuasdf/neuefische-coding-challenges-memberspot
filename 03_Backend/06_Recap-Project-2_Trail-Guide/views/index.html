@@ -4,6 +4,7 @@
 {% block content %}
     <h1>All Trails</h1>
     {% for trail in trails %}
-        {{ trailMacros.trailCard(trail) }}
+            {{ trailMacros.trailCard(trail) }}
+        {% block admin %}{% endblock %}
     {% endfor %}
 {% endblock %}

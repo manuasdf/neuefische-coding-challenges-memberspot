@@ -31,11 +31,11 @@ The data model has two tables. A regions table holds the area each trail belongs
 Styling is handled by pico.css, a class-less CSS framework. You add it once via a CDN link in your base template, then write plain semantic HTML — <header>, <nav>, <article>, <form>, <table> — and pico styles it for you. There is no design work to do beyond writing correct markup.
 
 The goal of this part is the read-only public site. By the end; 
-* [ ] anyone visiting the root URL can browse all trails,
-* [ ] click into a trail detail page,
-* [ ] and browse trails grouped by region. 
-* [ ] Every page extends the same base layout. 
-* [ ] Trail listings reuse a single Nunjucks macro.
+* [x] anyone visiting the root URL can browse all trails,
+* [x] click into a trail detail page,
+* [X] and browse trails grouped by region. 
+* [x] Every page extends the same base layout. 
+* [x] Trail listings reuse a single Nunjucks macro.
 
 Models:
 
@@ -53,21 +53,88 @@ Routes and controllers:
     * [X] GET /regions lists all regions
     * [X] GET /regions/:slug shows a single region with its trails
 * [X] Mount the router in app.ts at the root path.
-* [ ] Type the route params using Express generics (Request<{ slug: string }>) so the controller stays type-safe.
+* [x] Type the route params using Express generics (Request<{ slug: string }>) so the controller stays type-safe.
 
 Views:
 
-* [ ] Build views/index.html, views/trail.html, views/regions.html, and views/region.html. Each one extends base.html and fills the content block.
-* [ ] Build views/macros/trailCard.html with a single trailCard(trail) macro that renders one trail as a pico.css <article> with a difficulty badge and a link to its detail page. Use this macro in both the home page and the region detail page.
-* [ ] Keep formatting concerns (turning created_at into a readable date) in a util function that is used in the controller, not in the model or the template.
-* [ ] Use Backend MVC Pattern for the controller signature and the routes-to-controller mapping, and to Backend Template Engines for macros and extends/block.
+* [x] Build views/index.html, views/trail.html, views/regions.html, and views/region.html. Each one extends base.html and fills the content block.
+* [x] Build views/macros/trailCard.html with a single trailCard(trail) macro that renders one trail as a pico.css <article> with a difficulty badge and a link to its detail page. Use this macro in both the home page and the region detail page.
+* [x] Keep formatting concerns (turning created_at into a readable date) in a util function that is used in the controller, not in the model or the template.
+* [x] Use Backend MVC Pattern for the controller signature and the routes-to-controller mapping, and to Backend Template Engines for macros and extends/block.
 
 Request logger:
 
-* [ ] Add middleware/logger.ts that writes one line per request to logs/access.log after the response finishes. Each line should include timestamp, method, URL, and status.
-* [ ] Register it in app.ts before the routers so it captures every request, including the API and admin routes you add later.
-* [ ] Use Backend Express Advanced for the logger middleware example with res.on("finish", ...).
+* [x] Add middleware/logger.ts that writes one line per request to logs/access.log after the response finishes. Each line should include timestamp, method, URL, and status.
+* [x] Register it in app.ts before the routers so it captures every request, including the API and admin routes you add later.
+* [x] Use Backend Express Advanced for the logger middleware example with res.on("finish", ...).
 
 ### Admin panel
 
+The goal of this part is HTML-form-based CRUD for trails: 
+* [X] By the end, an editor can list, create, edit, and delete trails through 
+* [X] a separate set of pages mounted at /admin. 
+* [X] The admin panel reuses the model functions from part 2 and adds three more for the write paths.
+
+Routes and controllers:
+
+* [x] Create routes/adminRoutes.ts mounted at /admin, with handlers in controllers/adminController.ts:
+    * [X] GET /admin lists all trails with edit and delete buttons
+    * [X] GET /admin/trails/new and POST /admin/trails
+    * [X] GET /admin/trails/:id/edit and POST /admin/trails/:id
+    * [X] POST /admin/trails/:id/delete
+* [X] Each POST handler responds with a redirect back to /admin after the model call succeeds.
+* [X] For the add and edit forms, render a select drop down list of all available regions in the template. Make sure to get the regions from the database and render the select based on this data.
+
+Models:
+
+Add:
+* [x] getTrailById(id), 
+* [x] addTrail(data), 
+* [x] updateTrail(id, data), and 
+* [x] deleteTrail(id) to trailModel.ts. 
+* [x] Use parameterized queries for every column. Make sure to update the slug based on the new title.
+
+Form parsing and sanitization:
+
+* [x] Register express.urlencoded({ extended: true }) in app.ts so req.body is populated for form submissions.
+
+Views:
+
+* [X] Build views/admin/list.html (table of trails with action buttons) and 
+* [X] views/admin/form.html (one form reused for both create and edit). Both extend base.html.
+
+Refer to Backend MVC Pattern’s admin CRUD challenge for the same pattern applied to a blog. The shape is identical here, only the entity changes.
+
 ### Public API
+
+The goal of this part is the JSON surface at /api. 
+* [X] Read endpoints are open to anyone. 
+* [ ] Write endpoints require an x-api-key header that matches the value in .env. 
+* [X] Controllers reuse the same model functions you already wrote — only the response format changes.
+
+Routes and controllers:
+
+* [X] Create routes/apiRoutes.ts mounted at /api, with handlers split between controllers/apiTrailController.ts and controllers/apiRegionController.ts:
+    * [X] GET /api/trails returns all trails. Support optional ?region=<slug> and ?difficulty=<easy|moderate|hard> filters via req.query.
+    * [X] GET /api/trails/:slug returns a single trail joined with its region, or 404 if missing.
+    * [X] GET /api/regions returns all regions.
+    * [X] GET /api/regions/:slug/trails returns the trails belonging to one region, or 404 if the region does not exist.
+    * [X] POST /api/trails creates a trail from a JSON body. Respond with 201 and the created resource.
+    * [X] PATCH /api/trails/:id updates the given fields. Respond with 200 and the updated resource, or 404.
+    * [X] DELETE /api/trails/:id deletes the trail. Respond with 204, or 404 if it does not exist.
+* [X] Register express.json() in app.ts.
+
+API key middleware:
+
+* [X] Add middleware/apiKey.ts. 
+* [X] The middleware reads req.header("x-api-key") and compares it to process.env.API_KEY. 
+* [X] If the header is missing or does not match, respond with 401 and a JSON error body. Otherwise call next().
+* [X] Apply the middleware only to the write endpoints, not to the read endpoints. The cleanest way is to attach it directly to the POST, PATCH, and DELETE route definitions inside apiRoutes.ts.
+
+Validation and status codes:
+
+* [X] Reject create and update bodies that are missing required fields with 400 and a JSON error message. A simple field-by-field check is enough — there is no need to introduce a validation library.
+* [X] Respond with 404 whenever a slug does not match an existing record.
+* [x] Respond with 204 for successful deletes (no body).
+
+Refer to Backend Basics and Express for the status code conventions and res.status().json(), and to Backend Express Advanced for the middleware signature and next().

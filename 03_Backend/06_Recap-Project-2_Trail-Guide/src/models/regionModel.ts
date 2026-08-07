@@ -63,3 +63,7 @@ export {
     getAllRegions,
     getRegionBySlug
 }
+
+export type {
+    Region
+}
