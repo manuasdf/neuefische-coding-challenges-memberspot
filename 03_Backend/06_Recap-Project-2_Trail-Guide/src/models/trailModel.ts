@@ -72,22 +72,23 @@ async function getAllTrailsApplyFilter(filter: Filter): Promise<Trail[]> {
     let trails: Trail[] = [];
     try {
         const db = getDB();
-        let filterArray: string[] = [];
-        if (filter.region)
-            filterArray.push(`regions_slug = @region_slug`)
-        if (filter.difficulty) 
+        const filterArray: string[] = [];
+        const filterParams: Record<string, any> = {};
+        let filterString: string = "";
+        if (filter.region) {
+            filterArray.push(`regions_slug = @region_slug`);
+            filterParams["@region_slug"] = filter.region;
+        }
+        if (filter.difficulty) {
             filterArray.push(`trails.difficulty = @difficulty`)
-        const filterString = filterArray.join(" AND ");
-        trails = await db.all<Trail[]>(SQLTemplateGetAllTrails + `
-            WHERE
-                ${filterString}
-            `, {
-                "@region_slug": filter.region,
-                "@difficulty": filter.difficulty,
-            });
+            filterParams["@difficulty"] = filter.difficulty;
+        }
+        if (filterArray.length > 0)
+            filterString = "WHERE " + filterArray.join(" AND ");
+        trails = await db.all<Trail[]>(SQLTemplateGetAllTrails + filterString, filterParams);
     } catch (err) {
         if (DEBUG) {
-            console.error(`Fetch trail data failed:`, err)
+            console.error(`Fetch filtered trail data failed:`, err)
             throw err;
         }
     }

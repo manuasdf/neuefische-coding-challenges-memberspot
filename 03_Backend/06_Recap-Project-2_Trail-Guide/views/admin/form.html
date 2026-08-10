@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div>
+        <button onclick="history.back()">Go Back</button>
+    </div>
+
+    <form action="/admin/trails/{% if trail %}{{trail.id}}{% endif %}" method="post">
+
+        {% import "../macros/form.html" as form %}
+
+        {{ form.input(id='title', label='Titel', placeholder='Title', value=trail.title) }}
+
+        {{ form.input(id='image_url', label='Image URL', placeholder='https://...', value=trail.image_url) }}
+
+        {{ form.dropdown(id='region_id', label='Region', options=regions, value=trail.region_id) }}
+
+        {{ form.dropdown(id='difficulty', label='Difficulty', options={"easy": "Easy","moderate": "Moderate","hard": "Hard"}, value=trail.difficulty) }}
+
+        {{ form.textarea(id='description', label='Description', placeholder='On this trail you will experience...', value=trail.description) }}
+
+        {{ form.input(id='distance_km', type='number', label='Distance in KM', value=trail.distance_km) }}
+
+        <button type="submit">{% if trail %}Update{% else %}Create{% endif %} trail</button>
+    </form>
+
+{% endblock %}

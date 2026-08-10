@@ -1,0 +1,33 @@
+{% macro dropdown(id, label, options, value) %}
+  <div>
+    <label for="{{ id }}">{{ label }}</label>
+    <select id="{{ id }}" name="{{ id }}">
+        {% for optionValue, optionLabel in options %}
+            <option value="{{optionValue}}"{% if value === optionValue %} selected{% endif %}>{{optionLabel}}</option>
+        {% endfor %}
+    </select>
+  </div>
+{% endmacro %}
+
+{% macro textarea(id, label, palceholder, value) %}
+    <label for="{{ id }}">{{ label }}</label>
+    <textarea
+      class="form-control"
+      name="{{ id }}"
+      id="{{ id }}"
+      placeholder="{{ palceholder }}"
+    >{{ value }}</textarea>
+{% endmacro %}
+
+{% macro input(id, label, type='text', placeholder, value) %}
+  <div>
+    <label for="{{ id }}">{{ label }}</label>
+    <input
+      id="{{ id }}"
+      name="{{ id }}"
+      type="{{ type }}"
+      placeholder="{{ placeholder }}"
+      value="{{ value }}"
+    />
+  </div>
+{% endmacro %}

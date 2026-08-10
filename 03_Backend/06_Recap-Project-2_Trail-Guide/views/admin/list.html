@@ -1,0 +1,8 @@
+{% extends "index.html" %}
+
+{% block admin %}
+    <a href="/admin/trails/{{trail.id}}/edit">Edit</a>&nbsp;
+    <form action="/admin/trails/{{trail.id}}/delete" method="post">
+        <button type="submit">Delete Post</button>
+    </form>
+{% endblock %}
