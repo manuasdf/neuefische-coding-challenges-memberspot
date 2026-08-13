@@ -1,5 +1,11 @@
 # Learning Concepts
 
+* [TypeScript](#typescript)
+* [SQL](#sql)
+* [Programming Paradigm](#programming-paradigm)
+* [Design Pattern](#design-pattern)
+
+
 ## TypeScript
 
 ![TypeScript](02_Typescript/TypeScript.jpg)
