@@ -6,7 +6,7 @@
 
 ## SQL
 
-![SQL][03_Backend/SQL.png]
+![SQL](03_Backend/SQL.png)
 
 ## Programming Paradigm
 
