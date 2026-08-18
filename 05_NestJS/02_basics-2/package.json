@@ -1,0 +1,18 @@
+{
+  "scripts": {
+    "dev": "ts-node src/app.module.ts"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.1.29",
+    "@nestjs/core": "^11.1.29",
+    "@nestjs/mapped-types": "*",
+    "@nestjs/platform-express": "^11.1.29",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^1.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
