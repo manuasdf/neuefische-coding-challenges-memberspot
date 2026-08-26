@@ -5,7 +5,8 @@ import {
   Delete,
   ParseUUIDPipe,
   NotFoundException,
-  UseGuards
+  UseGuards,
+  Req
 } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { CommentResponseDto } from './dto/comment-response.dto';
@@ -33,8 +34,8 @@ export class CommentsController {
   // // Special: Does not delete the comment, but sets its body to “deleted”
   @UseGuards(JwtAuthGuard)
   @Delete(":id")
-  async remove(@Param('id', ParseUUIDPipe) id: string) {
-    const comment = await this.commentsService.remove(id);
+  async remove(@Param('id', ParseUUIDPipe) id: string, @Req() req: any) {
+    const comment = await this.commentsService.remove(id, req.user);
 
     if (!comment)
       throw new NotFoundException("Comment not found")

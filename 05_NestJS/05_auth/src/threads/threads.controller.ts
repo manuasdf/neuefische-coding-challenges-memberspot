@@ -11,7 +11,8 @@ import {
   HttpStatus,
   HttpCode,
   Query,
-  UseGuards
+  UseGuards,
+  Req
 } from '@nestjs/common';
 import { ThreadsService } from './threads.service';
 import { CreateThreadDto } from './dto/create-thread.dto';
@@ -29,8 +30,8 @@ export class ThreadsController {
 
   //  	Create a thread with title and body
   @Post()
-  create(@Body() createThread: CreateThreadDto) {
-    const threads = this.threadsService.create(createThread);
+  async create(@Req() req: any, @Body() createThread: CreateThreadDto) {
+    const threads = await this.threadsService.create({...createThread, author: req.user.username});
     if (!threads) 
       throw new NotFoundException("Thread not created")
     return plainToInstance(ThreadResponseDto, threads, {
@@ -62,8 +63,8 @@ export class ThreadsController {
   }
 
   @Patch(':id')
-  async update(@Param('id', ParseUUIDPipe) id: string, @Body() updateThread: UpdateThreadDto) {
-    const threads = await this.threadsService.update(id, updateThread);
+  async update(@Param('id', ParseUUIDPipe) id: string, @Req() req: any, @Body() updateThread: UpdateThreadDto) {
+    const threads = await this.threadsService.update(id, updateThread, req.user);
     if (!threads) 
       throw new NotFoundException("Thread not updated")
     return plainToInstance(ThreadResponseDto, threads, {
@@ -85,7 +86,7 @@ export class ThreadsController {
   // //    Deletes the thread and all of its comments (comments are actually deleted)
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async remove(@Param('id', ParseUUIDPipe) id: string) {
-    return await this.threadsService.remove(id);
+  async remove(@Param('id', ParseUUIDPipe) id: string, @Req() req: any) {
+    return await this.threadsService.remove(id, req.user);
   }
 }
