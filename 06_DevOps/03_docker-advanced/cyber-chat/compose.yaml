@@ -1,0 +1,28 @@
+services:
+  cyberchat:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://cyber-chat:cyber-chat@db:5432/postgres
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:17
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: cyber-chat
+      POSTGRES_PASSWORD: cyber-chat
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cyber-chat"]
+      interval: 2s
+      timeout: 2s
+      retries: 15
+    volumes:
+      - pgdata:/var/lib/postgresql
+
+volumes:
+  pgdata:
