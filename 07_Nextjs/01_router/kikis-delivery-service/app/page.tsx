@@ -1,15 +1,12 @@
 import { getDeliveryById } from "@/lib/services/deliveriesService";
-import { useRouter } from "next/router";
 
 export default function Page() {
-  const router = useRouter();
-  const id = router.query.id;
-  const delievery = typeof id === "string" ? getDeliveryById(id) : undefined;
+  const delievery = getDeliveryById("1");
   return (
     <div>
-      <h1>
+      <h2>
         First delievery
-      </h1>
+      </h2>
       <ul>
         <li key={delievery?.id}>
           Pickup: {delievery?.pickup} 

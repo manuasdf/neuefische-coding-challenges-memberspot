@@ -1,12 +1,16 @@
 import { getDeliveryById } from "@/lib/services/deliveriesService";
+import Link from "next/link";
 
-export default function Page() {
-  const delievery = getDeliveryById("0");
+export default async function Page({params}: PageProps<"/deliveries/[id]">) {
+  const { id } = await params;
+  const delievery = getDeliveryById(id);
+  console.log(delievery);
   return (
     <div>
-      <h1>
+      <h2>
         First delievery
-      </h1>
+      </h2>
+      <Link href={`/deliveries`}>Go back</Link>
       <ul>
         <li key={delievery?.id}>
           Pickup: {delievery?.pickup} 
