@@ -31,3 +31,14 @@ export function getAllDeliveries(): DeliveryRequest[] {
 export function getDeliveryById(id: string): DeliveryRequest | null {
   return deliveries.find((d) => d.id === id) || null;
 }
+
+export function createDelivery(options: Pick<DeliveryRequest, "pickup" | "destination">) {
+  const newDelivery = {
+    id: (Number(deliveries[deliveries.length-1].id)+1).toString(),
+    pickup: options.pickup,
+    destination: options.destination,
+    status: "active" as DeliveryStatus
+  } as DeliveryRequest;
+  deliveries.push(newDelivery);
+  return newDelivery
+}

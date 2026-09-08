@@ -32,10 +32,11 @@ export default function DeliveryFilter({
         {visible.map((delivery) => (
             <li key={delivery.id}>
               <Link href={`/deliveries/${delivery.id}`}>
-                  Pickup: {delivery.pickup} 
-                  Destination: {delivery.destination} 
-                  Status: {delivery.status} 
+                  Pickup: {delivery.pickup} <br />
+                  Destination: {delivery.destination} <br />
+                  Status: {delivery.status} <br />
               </Link>
+              <br />
             </li>
           ))}
       </ul>
