@@ -1,8 +1,8 @@
 import { getAllDeliveries } from "@/lib/services/deliveriesService";
 import DeliveryFilter from "./_component/DeliveryFilter";
 
-export default function Page() {
-  const delieveries = getAllDeliveries();
+export default async function Page() {
+  const delieveries = await getAllDeliveries();
   console.log(delieveries);
   return (
     <div>

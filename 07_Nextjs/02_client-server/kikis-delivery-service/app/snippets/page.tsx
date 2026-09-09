@@ -1,8 +1,8 @@
 import { getAllSnippets } from "@/lib/services/snippetsService";
 import Link from "next/link";
 
-export default function Page() {
-  const snippets = getAllSnippets();
+export default async function Page() {
+  const snippets = await getAllSnippets();
   return (
     <div>
       <h2>

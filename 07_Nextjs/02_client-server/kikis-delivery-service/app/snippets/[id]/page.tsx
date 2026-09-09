@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default async function Page({params}: PageProps<"/snippets/[id]">) {
   const { id } = await params;
-  const snippet = getSnippetById(Number(id));
+  const snippet = await getSnippetById(id);
   return (
     <div>
       <h2>

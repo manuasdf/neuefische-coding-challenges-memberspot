@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default async function Page({params}: PageProps<"/deliveries/[id]">) {
   const { id } = await params;
-  const delievery = getDeliveryById(id);
+  const delievery = await getDeliveryById(id);
   
   return (
     <div>
